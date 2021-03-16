@@ -1,0 +1,173 @@
+[v-cloak] {
+  display: none;
+}
+
+#jumbo-top {
+	background-color: #ca861d;
+	width: 100%;
+}
+
+#jumbo-mid {
+        background-color: #ae9142;
+	height:10px;
+	width: 100%;
+}
+
+#jumbo-bottom {
+        background-color: #0c2340;
+	height:200px;
+}
+
+#jumbo-header {
+	float: right;
+    	color: #ffffff;
+	padding: 8px 0;
+}
+
+#jumbo-image {
+	height: 90px;
+	float: left;
+}
+
+table tr:nth-child(even) {
+  	background-color: #eee;
+}
+
+table tr:nth-child(odd) {
+ 	background-color: #fff;
+}
+
+table th {
+	background-color: black;
+  	color: white;
+}
+
+table.header {
+	margin-bottom: 0;
+	table-layout: fixed;
+}
+
+table.header tr:nth-child(even) {
+	background-color: #ca861d;
+}
+
+table.header tr:nth-child(odd) {
+	background-color: #ca861d;
+}
+
+table.header th {
+	background-color: #ca861d;
+}
+
+.nav-item.active, nav-item.active:hover {
+	background-color: #ae9142 !important;
+}
+
+.tabs {
+	margin: 0 auto;
+	width: 70%;
+	background-color:#eae6db;
+	border-radius: 30px 30px 0 0;
+}
+
+.centered {
+	margin: 0 auto;
+	width:70%;
+	background-color:#eae6db;
+}
+
+.c-div {
+	margin: 0 auto;
+}
+
+.input-column {
+	margin: 0 auto;
+	display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  	.tabs, .centered {
+ 		width: 95%;
+	}
+
+	input[type='radio'] { 
+		transform: scale(2); 
+		margin-right: 10px;
+	}
+}
+
+.fade-enter-active, .fade-leave-active {
+  	transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
+}
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  	transition: all .1s ease;
+}
+.slide-fade-leave-active {
+  	transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+	/* .slide-fade-leave-active below version 2.1.8 */ {
+  	transform: translateX(10px);
+  	opacity: 0;
+}
+
+.tab-view {
+	min-height: 670px;
+}
+
+.sign-in {
+	font-size: small;
+}
+
+.nav-rounded {
+	border-radius: 30px;
+	cursor: pointer;
+    	transition: background-color .3s;
+}
+
+.nav-rounded:hover {
+	background-color: #ae91428c;
+}
+
+.notsaved {
+	color: #ae91428c
+}
+
+.active.notsaved {
+	color: black;
+}
+
+.notsaved:hover {
+	background-color: #eae6db;
+	cursor: arrow;
+}
+
+.bar{
+	fill: steelblue;
+}
+
+.bar:hover{
+	fill: brown;
+}
+
+.axis {
+	font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+#pie-totals {
+	margin: 0 auto;
+	width: 300px;
+}
