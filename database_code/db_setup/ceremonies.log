@@ -1,0 +1,57 @@
+
+SQL*Loader: Release 11.2.0.2.0 - Production on Sun May 3 19:23:46 2020
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Control File:   ceremonies.ctl
+Data File:      allceremonies.csv
+  Bad File:     allceremonies.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     64 rows, maximum of 256000 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table CEREMONY, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+ID                                  FIRST     *   ,  O(") CHARACTER            
+DEPARTMENT                           NEXT     *   ,  O(") CHARACTER            
+CEREMONY_DATE                        NEXT     *   ,  O(") CHARACTER            
+LOCATION                             NEXT     *   ,  O(") CHARACTER            
+CREATED_BY                           NEXT     *   ,  O(") CHARACTER            
+CREATED_AT                           NEXT     *   ,  O(") CHARACTER            
+UPDATED_BY                           NEXT     *   ,  O(") CHARACTER            
+UPDATED_AT                           NEXT     *   ,  O(") CHARACTER            
+COLLEGE                              NEXT     *   ,  O(") CHARACTER            
+MAJOR                                NEXT     *   ,  O(") CHARACTER            
+DEGREE                               NEXT     *   ,  O(") CHARACTER            
+
+
+Table CEREMONY:
+  9 Rows successfully loaded.
+  0 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                 181632 bytes(64 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:             9
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Sun May 03 19:23:46 2020
+Run ended on Sun May 03 19:23:46 2020
+
+Elapsed time was:     00:00:00.03
+CPU time was:         00:00:00.01

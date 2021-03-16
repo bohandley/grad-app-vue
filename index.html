@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+    <script src="/lib/vueDev.js"></script>
+    <script src="/js/utilities/misc.js"></script>
+    <script src="/js/utilities/obj.js"></script>
+    <script src="/js/loadApp.js"></script>
+    <title>GradApp</title>
+  </head>
+  <body>
+	<div id="app">
+		<app-header
+			v-model="usr" 
+			:usr="usr" 
+			:usrs="usrs"
+			:assumed_usr="assumed_usr"
+			:reg_usr="reg_usr"
+		>
+		</app-header>
+
+    		</usr-select>
+		<register-usr 
+			v-if="reg_usr" 
+			:new_usr="new_usr" 
+			:ndid="ndid"
+			:reg_success="reg_success"
+		>
+		</register-usr>
+
+		<div v-cloak v-if="signed_in">
+
+		<tabs 
+			v-if="!reg_usr" 
+			:active_tab="active_tab" 
+			:isadmin="usr.IS_ADMIN"
+			:student_data="student_data"
+		></tabs>
+		<div v-if="!reg_usr" class="container centered">
+			<div   class="row tab-view" v-if="active_tab == 'welcome'" >
+                                <div class="col-sm-12 col-lg-3 c-div">
+					<div v-html="admtxt('admtxt_welcome_L')"></div>
+					<admintext-input
+						:usr="usr"
+						:el_show="get_admintext_show('admtxt_welcome_L')"
+					>
+					</admintext-input>
+				
+				</div>
+				<div class="col-sm-12 col-lg-5 c-div">
+					<div style="text-align: center;" v-html="admtxt('admtxt_welcome_M')"></div>
+					<admintext-input
+						:usr="usr"
+						:el_show="get_admintext_show('admtxt_welcome_M')"
+					>
+					</admintext-input>
+					<h2 style="text-align: center;">Congratulations!<h2>
+					<h4 v-if="assumed_usr.NDID" style="text-align: center;">{{assumed_usr.FIRST_NAME + ' ' + assumed_usr.LAST_NAME}}</h4>
+					<h4 v-else style="text-align: center;">{{usr.FIRST_NAME + ' ' + usr.LAST_NAME}}</h4>
+					<div v-for="degree in degrees">
+						<h5 style="text-align: center;">{{ degree.DEGREE_NAME + " in  " + degree.DEPARTMENT}}
+					</div>
+                                </div>
+				<div class="col-sm-12 col-lg-3 c-div">
+					<next-button></next-button>
+                                </div>
+			</div>
+                        <div   class="row tab-view" v-if="active_tab == 'diploma_info'">
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <span v-html="admtxt('admtxt_diploma_info_L')"></span>
+					<admintext-input
+						:usr="usr"
+						:el_show="get_admintext_show('admtxt_diploma_info_L')"
+					>       
+					</admintext-input>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 c-div">
+					<h4 style="text-align: center;">Diploma Information</h4>
+					<div style="text-align: center;" style="text-align: center;" v-html="admtxt('admtxt_diploma_info_M')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_diploma_info_M')"
+                                        >
+					</admintext-input>
+					<table class="table table-hover">
+					<tr>
+						<td>Diploma Name:</td>
+                                       		<td>
+							<input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_name'))" v-model="dtpt('dtpt_diploma_name').VALUE"></input>
+						</td>
+					</tr>
+					<tr>
+                                                <td>Diploma Hometown:</td>
+                                                <td>
+							<input class="form-control" v-on:blur="store(dtpt('dtpt_hometown'))" v-model="dtpt('dtpt_hometown').VALUE"></input>
+						</td>
+                                        </tr>
+					<tr>
+                                                <td>Phonetic Name:</td>
+                                                <td>
+							<input class="form-control" v-on:blur="store(dtpt('dtpt_phonetic_nm'))" v-model="dtpt('dtpt_phonetic_nm').VALUE"></input>
+						</td>
+                                        </tr>	
+					<tr>
+                                                <td>Cell Phone:</td>
+						<td>
+                                                	<input class="form-control" v-on:blur="store(dtpt('dtpt_cell_num'))" v-model="dtpt('dtpt_cell_num').VALUE"></input>
+						</td>
+                                        </tr>
+					<tr>
+                                                <td>Post Grad Email:</td>
+                                                <td>
+							<input class="form-control" v-on:blur="store(dtpt('dtpt_postgrad_email'))" v-model="dtpt('dtpt_postgrad_email').VALUE"></input>
+						</td>
+                                        </tr>
+					</table>
+                                </div>
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <next-button></next-button>
+                                </div>
+                        </div>
+                        <div   class="row tab-view" v-if="active_tab == 'diploma_ceremony'">
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <div v-html="admtxt('admtxt_diploma_ceremony_L')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_diploma_ceremony_L')"
+                                        >
+					</admintext-input>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 c-div">
+					<h4 style="text-align: center;">
+						{{ appstg('appstg_mailonly').VALUE == '1' ? 'Diploma Mail Address' : appstg('appstg_summerfall').VALUE == '1' ? 'How will you receive your diploma?' : 'Ceremony RSVP' }}
+
+					</h4>
+					<div style="text-align: center;" v-html="admtxt('admtxt_diploma_ceremony_M')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_diploma_info_M')"
+                                        >
+					</admintext-input>
+                                        <radio-buttons
+                        			:ceremonies="ceremonies"
+                        			:cmny="cmny"
+                			></radio-buttons>
+					<table class="table table-hover">
+					<tr v-if="cmny.CEREMONY_ID != 'not-attending' && cmny.CEREMONY_ID != ''">
+                                                <td>Tickets:</td>
+						<td>
+						<input 
+							class="form-control" 
+							type="number" 
+							v-on:change="store_ticket(tkt('tkt_dc'))" 
+							v-model="tkt('tkt_dc').AMOUNT"
+						>
+						</td>
+                                        </tr>
+					</table>
+					<h4 v-if="cmny.CEREMONY_ID == 'not-attending'">How will you recieve your diploma?</h4>
+					<two-radio-buttons 
+						v-if="cmny.CEREMONY_ID == 'not-attending'"
+						:dtpt="dtpt('dtpt_diploma_indct_rcv')" 
+						:objs="mail"
+					>
+					</two-radio-buttons>
+					<table class="table table-hover" v-if="cmny.CEREMONY_ID == 'not-attending' && dtpt('dtpt_diploma_indct_rcv').VALUE == 'mail'">
+						<tr>
+                                                        <td>Country:</td>
+                                        		<td> 
+						               <input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_country'))" v-model="dtpt('dtpt_diploma_country').VALUE"></input>
+							</td>
+                                                </tr>
+						<tr>
+                                                	<td>Address 1:</td>
+							<td>
+	                                                	<input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_add1'))" v-model="dtpt('dtpt_diploma_add1').VALUE"></input>
+							</td>
+                                        	</tr>
+                                        	<tr>
+                                               		<td>Address 2:</td>
+                                                	<td>
+								<input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_add2'))" v-model="dtpt('dtpt_diploma_add2').VALUE"></input>
+							</td>
+                                        	</tr>
+                                        	<tr>
+                                                	<td>Address 3:</td>
+                                                	<td>
+								<input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_add3'))" v-model="dtpt('dtpt_diploma_add3').VALUE"></input>
+							</td>
+                                        	</tr>
+                                        	<tr>
+                                                	<td>City:</td>
+                                                	<td>
+								<input class="form-control" v-on:blur="store(dtpt('dtpt_diploma_city'))" v-model="dtpt('dtpt_diploma_city').VALUE"></input>
+							</td>
+                                        	</tr>
+                                        	<tr>
+                                                	<td>State:</td>
+                                                	<td>
+								<input class="form-control" v-on:blur="store(dtpt('dtpt_postgrad_email'))" v-model="dtpt('dtpt_postgrad_email').VALUE"></input>
+							</td>
+                                        	</tr>
+					</table>
+
+				</div>
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <next-button></next-button>
+                                </div>
+                        </div>
+                        <div   class="row tab-view" v-if="active_tab == 'umass'">
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <span v-html="admtxt('admtxt_umass_L')"></span>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_umass_L')"
+                                        >
+					</admintext-input>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 c-div">
+                                        <h4 style="text-align: center;" >University Mass RSVP</h4>
+					<div style="text-align: center;" v-html="admtxt('admtxt_umass_M')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_umass_M')"
+                                        >
+					</admintext-input>
+                                        <two-radio-buttons
+                                                :dtpt="dtpt('dtpt_umass_rsvp')"
+                                                :objs="umass"
+                                        >
+                                        </two-radio-buttons>
+					<table class="table table-hover">
+                                        <tr v-if="dtpt('dtpt_umass_rsvp').VALUE == '1'">
+                                                <td>Tickets:</td>
+                                                <td>
+                                                <input
+							class="form-control"
+                                                        type="number"
+                                                        v-on:change="store_ticket(tkt('tkt_um'))"
+                                                        v-model="tkt('tkt_um').AMOUNT"
+                                                >
+                                                </td>
+                                        </tr>
+                                        </table>
+                                </div>
+                                <div class="col-sm-12 col-lg-3 c-div">
+					<next-button></next-button>
+                                </div>
+                        </div>
+                        <div   class="row tab-view" v-if="active_tab == 'uceremony'">
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <span v-html="admtxt('admtxt_uceremony_L')"></span>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_uceremony_L')"
+                                        >
+					</admintext-input>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 c-div">
+                                        <h4 style="text-align: center;">University Ceremony RSVP</h4>
+					<div style="text-align: center;" v-html="admtxt('admtxt_uceremony_M')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_uceremony_M')"
+                                        >
+					</admintext-input>
+                                        <two-radio-buttons
+
+                                                :dtpt="dtpt('dtpt_uceremony_rsvp')"
+                                                :objs="ucmny"
+                                        >
+                                        </two-radio-buttons>
+                                        <table class="table table-hover" v-if="dtpt('dtpt_uceremony_rsvp').VALUE == '1'">
+                                        <tr>
+                                                <td>General Tickets:</td>
+                                                <td>
+                                                <input
+							class="form-control"
+                                                        type="number"
+                                                        v-on:change="store_ticket(tkt('tkt_uc'))"
+                                                        v-model="tkt('tkt_uc').AMOUNT"
+                                                >
+                                                </td>
+					</tr>
+                                        <tr>
+						<td>Special Needs Tickets:</td>
+                                                <td>
+                                                <input
+							class="form-control"
+                                                        type="number"
+                                                        v-on:change="store_ticket(tkt('tkt_uc_spn'))"
+                                                        v-model="tkt('tkt_uc_spn').AMOUNT"
+                                                >
+                                                </td>
+					</tr>
+                                        <tr>
+						<td>Wheelchair Tickets:</td>
+                                                <td>
+                                                <input
+							class="form-control"
+                                                        type="number"
+                                                        v-on:change="store_ticket(tkt('tkt_uc_whl'))"
+                                                        v-model="tkt('tkt_uc_whl').AMOUNT"
+                                                >
+                                                </td>
+					</tr>
+                                        <tr>
+						<td>Please describe any special accommodations:</td>
+                                                <td>
+                                                <textarea
+							class="form-control"
+                                                        rows="4"
+							cols="19"
+                                                        v-on:blur="store(dtpt('dtpt_ucmny_acc'))"
+							v-model="dtpt('dtpt_ucmny_acc').VALUE"
+                                                >
+						</textarea>
+                                                </td>
+						
+                                        </tr>
+					<tr>
+						<td>Please check this box to indicate you understand the ND ticket policy</td>
+						<td>
+						<input
+							value="1"
+							type="checkbox" 
+							id="checkbox" 
+							v-model="dtpt('dtpt_uceremony_tkt_policy').VALUE== '1' ? 'checked' : ''" 
+							@click="store(dtpt('dtpt_uceremony_tkt_policy'),1)"
+							style="margin: 0 auto;display:block;"
+						>
+						</td>
+					</tr>
+                                        </table>
+                                </div>
+                                <div class="col-sm-12 col-lg-3 c-div">
+					<next-button></next-button>
+                                </div>
+                        </div>
+			<div   class="row tab-view" v-if="active_tab == 'confirm'">
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <span v-html="admtxt('admtxt_confirmation_L')"></span>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_confirmation_L')"
+                                        >
+					</admintext-input>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 c-div">
+					<div style="text-align: center;" v-html="admtxt('admtxt_confirmation_M')"></div>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_confirmation_M')"
+                                        >
+					</admintext-input>
+                                        <data-table
+
+			                        :student_data="student_data"
+			                        :ceremonies="ceremonies"
+			                        :degrees="degrees"
+                        			:tickets="tickets"
+               		 		>
+			                </data-table>
+                                </div>
+                                <div class="col-sm-12 col-lg-3 c-div">
+                                        <span v-html="admtxt('admtxt_confirmation_R')"></span>
+					<admintext-input
+                                                :usr="usr"
+                                                :el_show="get_admintext_show('admtxt_confirmation_R')"
+                                        >
+					</admintext-input>
+					<div style="text-align:center;">
+					<button 
+						@click="confirmation" 
+						class="btn btn-success" 
+						type="button" 
+					>
+						Confirm all data 
+						{{ appstg('appstg_conf_email_off').VALUE == '0' ? 'and send email summary' : ''}}
+					</button>
+					</div>
+                                </div>
+                        </div>
+                        <div   class="row tab-view" v-if="active_tab == 'appsettings' && usr.IS_ADMIN == '1'">
+                                <div class="col-sm-12 col-lg-8 c-div">
+					<h4 style="text-align: center;">Appsettings</h4>
+                                        <table class="table table-hover">
+                                        <tr>
+                                                <td>appstg_termcode</td>
+                                                <td>
+                                                <input
+                                                        class="form-control"
+                                                        v-on:blur="upd_appsetting(appstg('appstg_termcode'))"
+                                                        v-model="appstg('appstg_termcode').VALUE"
+                                                >
+                                                </input>
+                                                </td>
+
+                                        </tr>
+					<tr v-for="atg in appsettings.filter(function(el){return el.TYP_TEXT != 'appstg_termcode'})">
+						<td>
+							{{atg.TYP_TEXT}}
+						</td>
+						<td>
+							<appstg-radio-buttons
+	                                                        :atg="appstg(atg.TYP_TEXT)"
+	                                                        :objs="appstg_options"
+        	                                        ></appstg-radio-buttons>
+						</td>
+					</tr>
+                                        </table>
+                                </div>
+                        </div>
+                        <div   class="row tab-view" v-if="active_tab == 'admintexts' && usr.IS_ADMIN == '1'">
+                                <div class="col-sm-12 col-lg-8 c-div">
+					<h4 style="text-align: center;">Admin Text</h4>
+					<table class="table table-hover">
+                                        <tr v-for="atxt in admintexts">
+                                                <td>{{atxt.TYP_TEXT}}</td>
+                                                <td>
+                                                <textarea
+                                                        class="form-control"
+                                                        rows="4"
+                                                        cols="19"
+                                                        v-on:blur="upd_admintext(atxt)"
+                                                        v-model="atxt.ADMINTEXT"
+                                                >
+                                                </textarea>
+                                                </td>
+
+                                        </tr>
+					</table>
+                                </div>
+                        </div>
+			<div   class="row tab-view" v-if="active_tab == 'reports' && usr.IS_ADMIN == '1'">
+                                <div class="col-sm-12 col-lg-12 c-div">
+					<reports
+						:active_tab="active_tab"
+					></reports>
+				</div>
+                        </div>
+                </div>
+
+	</div>
+	</div>
+  </body>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/vue/components/admintextInput.js"></script>
+<script src="/js/vue/components/reports.js"></script>
+<script src="/js/vue/components/registerUsr.js"></script>
+<script src="/js/vue/components/header.js"></script>
+<script src="/js/vue/components/usrSelect.js"></script>
+<script src="/js/vue/components/tabs.js"></script>
+<script src="/js/vue/components/nextButton.js"></script>
+<script src="/js/vue/components/radioButtons.js"></script>
+<script src="/js/vue/components/dataTable.js"></script>
+<script src="/js/vue/app.js"></script>
+</html>

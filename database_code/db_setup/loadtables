@@ -1,0 +1,23 @@
+sqlplus -S bohandle/bohandle @crtusrs
+sqlldr bohandle/bohandle control=usrs.ctl
+
+sqlplus -S bohandle/bohandle @crttyps
+sqlldr bohandle/bohandle control=typs.ctl
+
+sqlplus -S bohandle/bohandle @crtdatapoints
+sqlldr bohandle/bohandle control=datapoints.ctl
+
+sqlplus -S bohandle/bohandle @crtadmintexts
+sqlldr bohandle/bohandle control=admintexts.ctl
+
+sqlplus -S bohandle/bohandle @crtappsettings
+sqlldr bohandle/bohandle control=appsettings.ctl
+
+sqlplus -S bohandle/bohandle @crtceremonies
+sqlldr bohandle/bohandle control=ceremonies.ctl
+
+sqlplus -S bohandle/bohandle @crtdegrees
+sqlldr bohandle/bohandle control=degrees.ctl
+
+sqlplus -S bohandle/bohandle @crttickets
+sqlldr bohandle/bohandle control=tickets.ctl
